@@ -1,0 +1,18 @@
+# ===== TLS / Certbot (绝对不能进 git) =====
+certs/
+certbot/
+
+# ===== Runtime / logs =====
+*.log
+
+# ===== OS junk =====
+.DS_Store
+Thumbs.db
+
+# ===== Editor / IDE =====
+.vscode/
+.idea/
+
+# ===== Temporary / backup =====
+*~
+*.swp

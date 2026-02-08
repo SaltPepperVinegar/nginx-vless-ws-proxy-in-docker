@@ -1,0 +1,40 @@
+services:
+  nginx:
+    image: nginx:1.25-alpine
+    container_name: nginx-blog
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./site.conf:/etc/nginx/conf.d/site.conf:ro
+      - ./html:/usr/share/nginx/html:ro
+      - ./certs:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
+    depends_on:
+      - v2ray
+    restart: unless-stopped
+
+  v2ray:
+    image: v2fly/v2fly-core:v5
+    container_name: v2ray
+    volumes:
+      - ./v2ray/config.json:/etc/v2ray/config.json:ro
+    restart: unless-stopped
+
+  certbot:
+    image: certbot/certbot:latest
+    container_name: certbot
+    volumes:
+      - ./certs:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    entrypoint: /bin/sh
+    command: >
+      -c "trap exit TERM;
+          while :; do
+            certbot renew --webroot -w /var/www/certbot --quiet
+              --deploy-hook 'docker exec nginx-blog nginx -s reload';
+            sleep 12h;
+          done"
+    restart: unless-stopped
