@@ -7,14 +7,14 @@
       "protocol": "vless",
       "settings": {
         "clients": [
-          { "id": "deccff44-293d-4f98-bd8b-2f02266b6a36", "level": 0 }
+          { "id": "${VLESS_UUID}", "level": 0 }
         ],
         "decryption": "none"
       },
       "streamSettings": {
         "network": "ws",
         "wsSettings": {
-          "path": "/api/v1/chat"
+          "path": "${VLESS_PATH}"
         }
       }
     }

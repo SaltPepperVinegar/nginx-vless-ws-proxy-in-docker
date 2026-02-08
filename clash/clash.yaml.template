@@ -1,0 +1,40 @@
+mixed-port: 7890
+allow-lan: false
+mode: rule
+log-level: info
+ipv6: false
+
+dns:
+  enable: false
+
+dialer:
+  tcp-keepalive: 30s
+  timeout: 10s
+
+proxies:
+  - name: vless-ws
+    type: vless
+    server: ${DOMAIN}
+    port: 443
+    uuid: ${VLESS_UUID}
+    tls: true
+    servername: ${DOMAIN}
+    skip-cert-verify: false
+    network: ws
+    ws-opts:
+      path: ${VLESS_PATH}
+      headers:
+        Host: ${DOMAIN}
+    udp: true
+
+proxy-groups:
+  - name: PROXY
+    type: select
+    proxies:
+      - vless-ws
+      - DIRECT
+
+rules:
+  - GEOIP,LAN,DIRECT
+  - GEOIP,CN,DIRECT
+  - MATCH,PROXY
