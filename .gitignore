@@ -13,3 +13,8 @@ Thumbs.db
 *.swp
 
 .env
+
+v2ray/config.json
+
+./nginx/site.conf
+./clash/clash.yaml
